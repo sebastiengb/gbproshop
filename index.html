@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GB Wear — Proshop Pre-Assessment</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --gb-red: #e2211c;
+    --gb-red-dark: #b51a16;
+    --gb-black: #111111;
+    --gb-grey: #6b6b6b;
+    --gb-light: #f5f5f5;
+    --gb-border: #e2e2e2;
+    --gb-white: #ffffff;
+    --white-belt: #e8e8e8;
+    --blue-belt: #1e5fb4;
+    --purple-belt: #6a3aa1;
+    --brown-belt: #7a4a1e;
+    --black-belt: #111111;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif;
+    background: #fafafa;
+    color: var(--gb-black);
+    line-height: 1.5;
+    padding: 0 0 60px 0;
+  }
+  .header {
+    background: #d9d9d9;
+    color: var(--gb-black);
+    padding: 32px 24px;
+    text-align: center;
+    border-bottom: 6px solid var(--gb-red);
+  }
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .logo-mark {
+    width: 180px;
+    height: auto;
+    display: block;
+    margin: 0 auto 8px;
+    flex-shrink: 0;
+  }
+  .header h1 {
+    margin-top: 18px;
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    color: var(--gb-black);
+  }
+  .header p {
+    margin-top: 6px;
+    font-size: 14px;
+    color: #555;
+    font-weight: 400;
+  }
+  .container {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  .intro {
+    background: var(--gb-white);
+    border-left: 4px solid var(--gb-red);
+    padding: 18px 20px;
+    margin-bottom: 24px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    font-size: 14px;
+    color: var(--gb-grey);
+  }
+  .section {
+    background: var(--gb-white);
+    border-radius: 6px;
+    padding: 24px 26px;
+    margin-bottom: 18px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    border: 1px solid var(--gb-border);
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid var(--gb-red);
+  }
+  .section-num {
+    background: var(--gb-red);
+    color: var(--gb-white);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .section-title {
+    flex-grow: 1;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--gb-black);
+  }
+  .section-weight {
+    background: var(--gb-light);
+    color: var(--gb-grey);
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .question {
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px dashed var(--gb-border);
+  }
+  .question:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+  .q-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gb-black);
+    margin-bottom: 8px;
+  }
+  .yes-no {
+    display: flex;
+    gap: 10px;
+  }
+  .yes-no label {
+    flex: 1;
+    text-align: center;
+    padding: 10px 14px;
+    border: 2px solid var(--gb-border);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gb-grey);
+    transition: all 0.15s;
+    background: var(--gb-white);
+  }
+  .yes-no label:hover {
+    border-color: var(--gb-red);
+    color: var(--gb-black);
+  }
+  .yes-no input[type="radio"] {
+    display: none;
+  }
+  .yes-no input[type="radio"]:checked + span {
+    /* not used - using label state */
+  }
+  .yes-no label.selected {
+    background: var(--gb-red);
+    color: var(--gb-white);
+    border-color: var(--gb-red);
+  }
+  .options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .options label {
+    padding: 10px 12px;
+    border: 2px solid var(--gb-border);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gb-grey);
+    transition: all 0.15s;
+    background: var(--gb-white);
+    text-align: center;
+  }
+  .options label:hover {
+    border-color: var(--gb-red);
+    color: var(--gb-black);
+  }
+  .options label.selected {
+    background: var(--gb-red);
+    color: var(--gb-white);
+    border-color: var(--gb-red);
+  }
+  .slider-wrap {
+    padding: 6px 4px 0 4px;
+  }
+  .slider-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .slider-row input[type="range"] {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    background: var(--gb-border);
+    border-radius: 3px;
+    outline: none;
+  }
+  .slider-row input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--gb-red);
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid var(--gb-white);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+  .slider-row input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: var(--gb-red);
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid var(--gb-white);
+  }
+  .slider-value {
+    min-width: 90px;
+    text-align: center;
+    background: var(--gb-black);
+    color: var(--gb-white);
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .slider-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--gb-grey);
+    margin-top: 4px;
+  }
+  .dont-know {
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--gb-grey);
+  }
+  .dont-know input {
+    cursor: pointer;
+  }
+  .dont-know label {
+    cursor: pointer;
+  }
+  .result-section {
+    background: #afafaf;
+    color: var(--gb-black);
+    border-radius: 6px;
+    padding: 36px 24px;
+    text-align: center;
+    margin-top: 24px;
+  }
+  .result-section h2 {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    color: var(--gb-red);
+  }
+  .score-circle {
+    width: 220px;
+    height: 220px;
+    margin: 0 auto 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background: conic-gradient(var(--gb-red) 0deg, var(--gb-red) 0deg, #ffffff 0deg);
+    position: relative;
+    transition: background 0.6s ease;
+  }
+  .score-circle::after {
+    content: "";
+    position: absolute;
+    inset: 12px;
+    background: #afafaf;
+    border-radius: 50%;
+  }
+  .score-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+  }
+  .score-num {
+    font-size: 60px;
+    font-weight: 900;
+    line-height: 1;
+    color: var(--gb-black);
+  }
+  .score-label {
+    font-size: 12px;
+    color: #555;
+    margin-top: 4px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .belt-tier {
+    display: inline-block;
+    padding: 10px 24px;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    background: var(--white-belt);
+    color: var(--gb-black);
+    border: 2px solid var(--white-belt);
+  }
+  .belt-tier.blue { background: var(--blue-belt); color: var(--gb-white); border-color: var(--blue-belt); }
+  .belt-tier.purple { background: var(--purple-belt); color: var(--gb-white); border-color: var(--purple-belt); }
+  .belt-tier.brown { background: var(--brown-belt); color: var(--gb-white); border-color: var(--brown-belt); }
+  .belt-tier.black { background: var(--black-belt); color: var(--gb-white); border: 2px solid var(--gb-red); }
+  .tier-desc {
+    font-size: 13px;
+    color: #2a2a2a;
+    max-width: 480px;
+    margin: 0 auto 24px;
+    line-height: 1.6;
+  }
+  .cta-button {
+    display: inline-block;
+    background: var(--gb-red);
+    color: var(--gb-white);
+    padding: 16px 36px;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+    box-shadow: 0 4px 14px rgba(200,16,46,0.3);
+  }
+  .cta-button:hover {
+    background: var(--gb-red-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(200,16,46,0.4);
+  }
+  .cta-sub {
+    margin-top: 12px;
+    font-size: 12px;
+    color: #444;
+  }
+  .breakdown {
+    margin-top: 30px;
+    padding-top: 24px;
+    border-top: 1px solid #888;
+    text-align: left;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .breakdown h3 {
+    font-size: 12px;
+    color: #444;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+    text-align: center;
+  }
+  .breakdown-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #888;
+    font-size: 13px;
+    color: var(--gb-black);
+  }
+  .breakdown-row:last-child { border-bottom: none; }
+  .breakdown-bar {
+    flex: 1;
+    height: 6px;
+    background: rgba(0,0,0,0.15);
+    border-radius: 3px;
+    margin: 0 12px;
+    overflow: hidden;
+  }
+  .breakdown-bar-fill {
+    height: 100%;
+    background: var(--gb-red);
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+  .breakdown-name { flex: 0 0 auto; min-width: 130px; }
+  .breakdown-score { flex: 0 0 auto; font-weight: 700; min-width: 60px; text-align: right; }
+  .footer-note {
+    text-align: center;
+    font-size: 12px;
+    color: var(--gb-grey);
+    padding: 24px;
+  }
+  @media (max-width: 600px) {
+    .options { grid-template-columns: 1fr; }
+    .score-circle { width: 180px; height: 180px; }
+    .score-num { font-size: 48px; }
+    .header h1 { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <img src="logo%20GB%20.png" alt="Gracie Barra" class="logo-mark">
+  <h1>Do you know your Proshop Score?</h1>
+  <p>Take the test and see how to unlock its potential</p>
+</div>
+
+<div class="container">
+
+  <div class="intro">
+    Answer the questions below to receive an instant scoring of your school's proshop strategy across 6 key dimensions. The results will reveal your current belt tier and the path to grow your proshop performance.
+  </div>
+
+  <!-- SECTION 1: SALES PERFORMANCE -->
+  <div class="section" data-section="sales">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div class="section-title">Sales Performance</div>
+      <div class="section-weight">Weight 20%</div>
+    </div>
+
+    <div class="question">
+      <span class="q-label">Do you know your Proshop Revenue per active student?</span>
+      <div class="yes-no" data-q="s1q1">
+        <label data-val="5">Yes</label>
+        <label data-val="1">No</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <span class="q-label">What is your Proshop Revenue as % of total revenue?</span>
+      <div class="slider-wrap">
+        <div class="slider-row">
+          <input type="range" min="0" max="25" value="0" data-q="s1q2" class="slider">
+          <div class="slider-value" id="s1q2-val">0%</div>
+        </div>
+        <div class="slider-meta"><span>0%</span><span>25%</span></div>
+        <div class="dont-know">
+          <input type="checkbox" id="s1q2-dk" data-dk="s1q2">
+          <label for="s1q2-dk">I don't know</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="question">
+      <span class="q-label">Do you know your conversion rate (buyers / active students)?</span>
+      <div class="slider-wrap">
+        <div class="slider-row">
+          <input type="range" min="0" max="100" value="0" data-q="s1q3" class="slider">
+          <div class="slider-value" id="s1q3-val">0%</div>
+        </div>
+        <div class="slider-meta"><span>0%</span><span>100%</span></div>
+        <div class="dont-know">
+          <input type="checkbox" id="s1q3-dk" data-dk="s1q3">
+          <label for="s1q3-dk">I don't know</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: SPACE & LAYOUT -->
+  <div class="section" data-section="space">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <div class="section-title">Space &amp; Layout</div>
+      <div class="section-weight">Weight 15%</div>
+    </div>
+
+    <div class="question">
+      <span class="q-label">Do you have a dedicated proshop?</span>
+      <div class="yes-no" data-q="s2q1">
+        <label data-val="5">Yes</label>
+        <label data-val="1">No</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <span class="q-label">Square meters dedicated to the proshop</span>
+      <div class="slider-wrap">
+        <div class="slider-row">
+          <input type="range" min="0" max="20" value="0" step="1" data-q="s2q2" class="slider">
+          <div class="slider-value" id="s2q2-val">0 m²</div>
+        </div>
+        <div class="slider-meta"><span>0 m²</span><span>20 m²</span></div>
+      </div>
+    </div>
+
+    <div class="question">
+      <span class="q-label">Location within the school</span>
+      <div class="options" data-q="s2q3">
+        <label data-val="5">Entry</label>
+        <label data-val="4">Lobby</label>
+        <label data-val="3">Mat-adjacent</label>
+        <label data-val="1">Tucked away</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <span class="q-label">Have you used a designer to build your proshop?</span>
+      <div class="yes-no" data-q="s2q4">
+        <label data-val="5">Yes</label>
+        <label data-val="1">No</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: VISUAL MERCHANDISING -->
+  <div class="section" data-section="visual">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <div class="section-title">Visual Merchandising</div>
+      <div class="section-weight">Weight 20%</div>
+    </div>
+
+    <div class="question">
+      <span class="q-label">Do you use mannequins or styled displays?</span>
+      <div class="yes-no" data-q="s3q1">
+        <label data-val="5">Yes</label>
+        <label data-val="1">No</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <span class="q-label">How often do you rotate your displays?</span>
+      <div class="options" data-q="s3q2">
+        <label data-val="1">Never / Rarely</label>
+        <label data-val="2">Twice a year</label>
+        <label data-val="3">Quarterly</label>
+        <label data-val="4">Monthly</label>
+        <label data-val="5">Weekly</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <span class="q-label">Is your proshop split into zones (kids, adults, casual, etc.)?</span>
+      <div class="yes-no" data-q="s3q3">
+        <label data-val="5">Yes</label>
+        <label data-val="1">No</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <span class="q-label">Do you use different types of supports (hangers, shelves, tables, etc.)?</span>
+      <div class="yes-no" data-q="s3q4">
+        <label data-val="5">Yes</label>
+        <label data-val="1">No</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: PRODUCT ASSORTMENT -->
+  <div class="section" data-section="product">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <div class="section-title">Product Assortment</div>
+      <div class="section-weight">Weight 15%</div>
+    </div>
+
+    <div class="question">
+      <span class="q-label">Do you have Kids products exposed?</span>
+      <div class="yes-no" data-q="s4q1">
+        <label data-val="5">Yes</label>
+        <label data-val="1">No</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <span class="q-label">Do you have accessories on display?</span>
+      <div class="yes-no" data-q="s4q2">
+        <label data-val="5">Yes</label>
+        <label data-val="1">No</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <span class="q-label">Do you have women's casual wear?</span>
+      <div class="yes-no" data-q="s4q3">
+        <label data-val="5">Yes</label>
+        <label data-val="1">No</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <span class="q-label">Do you have men's casual wear?</span>
+      <div class="yes-no" data-q="s4q4">
+        <label data-val="5">Yes</label>
+        <label data-val="1">No</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <span class="q-label">Do you have core products (gi, rashguards, shorts, belts)?</span>
+      <div class="yes-no" data-q="s4q5">
+        <label data-val="5">Yes</label>
+        <label data-val="1">No</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: SALES PROCESS & STAFF -->
+  <div class="section" data-section="staff">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <div class="section-title">Sales Process &amp; Staff</div>
+      <div class="section-weight">Weight 15%</div>
+    </div>
+
+    <div class="question">
+      <span class="q-label">Is your staff trained on the products?</span>
+      <div class="yes-no" data-q="s5q1">
+        <label data-val="5">Yes</label>
+        <label data-val="1">No</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <span class="q-label">Active vs. Passive selling approach — Does your team often recommend gear to students?</span>
+      <div class="slider-wrap">
+        <div class="slider-row">
+          <input type="range" min="1" max="5" value="3" step="1" data-q="s5q2" class="slider">
+          <div class="slider-value" id="s5q2-val">Mixed</div>
+        </div>
+        <div class="slider-meta"><span>Passive</span><span>Active</span></div>
+      </div>
+    </div>
+
+    <div class="question">
+      <span class="q-label">Does the Head Coach share the "Why" of using Gracie Barra products and apparel?</span>
+      <div class="yes-no" data-q="s5q3">
+        <label data-val="5">Yes</label>
+        <label data-val="1">No</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <span class="q-label">Does your staff wear Gracie Barra products every day?</span>
+      <div class="yes-no" data-q="s5q4">
+        <label data-val="5">Yes</label>
+        <label data-val="1">No</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <span class="q-label">Does your staff always wear the new collections?</span>
+      <div class="yes-no" data-q="s5q5">
+        <label data-val="5">Yes</label>
+        <label data-val="1">No</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: DIGITAL & OPERATIONS -->
+  <div class="section" data-section="digital">
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <div class="section-title">Digital &amp; Operations</div>
+      <div class="section-weight">Weight 15%</div>
+    </div>
+
+    <div class="question">
+      <span class="q-label">Do you have a POS system in place?</span>
+      <div class="yes-no" data-q="s6q1">
+        <label data-val="5">Yes</label>
+        <label data-val="1">No</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <span class="q-label">Do you promote pre-orders for new collections?</span>
+      <div class="yes-no" data-q="s6q2">
+        <label data-val="5">Yes</label>
+        <label data-val="1">No</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <span class="q-label">Do you post/repost new GB Products on social media?</span>
+      <div class="yes-no" data-q="s6q3">
+        <label data-val="5">Yes</label>
+        <label data-val="1">No</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <span class="q-label">Do you have a reorder cadence and dead-stock management process?</span>
+      <div class="yes-no" data-q="s6q4">
+        <label data-val="5">Yes</label>
+        <label data-val="1">No</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULT SECTION -->
+  <div class="result-section">
+    <h2>Your Proshop Score</h2>
+
+    <div class="score-circle" id="score-circle">
+      <div class="score-content">
+        <div class="score-num" id="score-num">0</div>
+        <div class="score-label">/ 100</div>
+      </div>
+    </div>
+
+    <div class="belt-tier" id="belt-tier">White Belt</div>
+    <div class="tier-desc" id="tier-desc">Start answering the assessment to discover your tier.</div>
+
+    <a href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ1Eta3Ok3CbKfAXhxm1mWRlSk7T4tNAFGQa4C8CgSgA_YXxxrN-U0WMPGNEYOWsgbwxavMdbFHq" target="_blank" class="cta-button" id="cta-button">
+      Click to improve your score →
+    </a>
+    <div class="cta-sub">Book a free consultation with our Customer Success Specialist</div>
+
+    <div class="breakdown">
+      <h3>Breakdown by Section</h3>
+      <div id="breakdown-list"></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer-note">
+  Powered by Gracie Barra Jiu-Jitsu Europe
+</div>
+
+<script>
+const answers = {};
+
+// Section configuration
+const sections = {
+  sales:   { name: 'Sales Performance',     weight: 20, qs: ['s1q1','s1q2','s1q3'] },
+  space:   { name: 'Space & Layout',        weight: 15, qs: ['s2q1','s2q2','s2q3','s2q4'] },
+  visual:  { name: 'Visual Merchandising',  weight: 20, qs: ['s3q1','s3q2','s3q3','s3q4'] },
+  product: { name: 'Product Assortment',    weight: 15, qs: ['s4q1','s4q2','s4q3','s4q4','s4q5'] },
+  staff:   { name: 'Sales Process & Staff', weight: 15, qs: ['s5q1','s5q2','s5q3','s5q4','s5q5'] },
+  digital: { name: 'Digital & Operations',  weight: 15, qs: ['s6q1','s6q2','s6q3','s6q4'] }
+};
+
+// YES/NO and OPTION pickers
+document.querySelectorAll('.yes-no, .options').forEach(group => {
+  const qId = group.dataset.q;
+  group.querySelectorAll('label').forEach(lbl => {
+    lbl.addEventListener('click', () => {
+      group.querySelectorAll('label').forEach(l => l.classList.remove('selected'));
+      lbl.classList.add('selected');
+      answers[qId] = parseInt(lbl.dataset.val);
+      updateScore();
+    });
+  });
+});
+
+// SLIDERS — value mapping
+function sliderToScore(qId, val) {
+  if (qId === 's1q2') {
+    // Revenue % of total: 0-25 (calibrated to BJJ industry benchmarks)
+    if (val < 5) return 1;   // underperforming
+    if (val < 8) return 2;   // average
+    if (val < 12) return 3;  // healthy
+    if (val < 18) return 4;  // high performing
+    return 5;                // exceptional
+  }
+  if (qId === 's1q3') {
+    // Conversion rate: 0-100
+    if (val < 10) return 1;
+    if (val < 25) return 2;
+    if (val < 50) return 3;
+    if (val < 75) return 4;
+    return 5;
+  }
+  if (qId === 's2q2') {
+    // Square meters: 0-20
+    if (val < 2) return 1;
+    if (val < 6) return 2;
+    if (val < 10) return 3;
+    if (val < 15) return 4;
+    return 5;
+  }
+  if (qId === 's5q2') {
+    // Active vs passive: already 1-5
+    return parseInt(val);
+  }
+  return 1;
+}
+
+function sliderDisplay(qId, val) {
+  if (qId === 's1q2') return val + '%';
+  if (qId === 's1q3') return val + '%';
+  if (qId === 's2q2') return val + ' m²';
+  if (qId === 's5q2') {
+    const labels = ['Fully Passive', 'Mostly Passive', 'Mixed', 'Mostly Active', 'Fully Active'];
+    return labels[parseInt(val) - 1];
+  }
+  return val;
+}
+
+document.querySelectorAll('.slider').forEach(slider => {
+  const qId = slider.dataset.q;
+  const valEl = document.getElementById(qId + '-val');
+  slider.addEventListener('input', () => {
+    const dkBox = document.querySelector('[data-dk="' + qId + '"]');
+    if (dkBox) dkBox.checked = false;
+    valEl.textContent = sliderDisplay(qId, slider.value);
+    answers[qId] = sliderToScore(qId, parseInt(slider.value));
+    updateScore();
+  });
+  // No pre-scoring — score stays at 0 until the user interacts with the slider
+});
+
+// "I don't know" checkboxes
+document.querySelectorAll('[data-dk]').forEach(cb => {
+  cb.addEventListener('change', () => {
+    const qId = cb.dataset.dk;
+    if (cb.checked) {
+      answers[qId] = 1;
+      const valEl = document.getElementById(qId + '-val');
+      if (valEl) valEl.textContent = "Don't know";
+    } else {
+      const slider = document.querySelector('.slider[data-q="' + qId + '"]');
+      if (slider) {
+        answers[qId] = sliderToScore(qId, parseInt(slider.value));
+        document.getElementById(qId + '-val').textContent = sliderDisplay(qId, slider.value);
+      }
+    }
+    updateScore();
+  });
+});
+
+// Score calculation
+function updateScore() {
+  let totalScore = 0;
+  const sectionScores = {};
+
+  Object.keys(sections).forEach(key => {
+    const cfg = sections[key];
+    const maxPerQ = 5;
+    const maxSection = cfg.qs.length * maxPerQ;
+    let raw = 0;
+    cfg.qs.forEach(q => {
+      raw += answers[q] || 0;
+    });
+    const sectionPct = raw / maxSection;
+    const sectionWeighted = sectionPct * cfg.weight;
+    sectionScores[key] = { raw: raw, max: maxSection, weighted: sectionWeighted, pct: sectionPct };
+    totalScore += sectionWeighted;
+  });
+
+  const finalScore = Math.round(totalScore);
+  document.getElementById('score-num').textContent = finalScore;
+
+  // Determine belt tier + matching color
+  let beltClass, beltName, beltDesc, beltColor;
+  if (finalScore <= 50) {
+    beltClass = 'white';
+    beltName = 'White Belt';
+    beltDesc = 'Foundational gaps. Your proshop has significant room to grow — a full layout and merchandising redesign can transform your performance.';
+    beltColor = '#e8e8e8';
+  } else if (finalScore <= 70) {
+    beltClass = 'blue';
+    beltName = 'Blue Belt';
+    beltDesc = 'Functional but underperforming. Focused work on merchandising and product assortment will unlock real revenue gains.';
+    beltColor = '#1e5fb4';
+  } else if (finalScore <= 80) {
+    beltClass = 'purple';
+    beltName = 'Purple Belt';
+    beltDesc = 'Strong foundation. The next level is process discipline and digital integration to optimize your existing setup.';
+    beltColor = '#6a3aa1';
+  } else if (finalScore <= 90) {
+    beltClass = 'brown';
+    beltName = 'Brown Belt';
+    beltDesc = 'Very strong performance. Fine-tuning across staff training, digital integration, and assortment depth can take you to flagship level.';
+    beltColor = '#7a4a1e';
+  } else {
+    beltClass = 'black';
+    beltName = 'Black Belt';
+    beltDesc = 'Flagship performance. You are a reference school — let\'s explore how your model can mentor others in the GB network.';
+    beltColor = '#111111';
+  }
+
+  // Update circle with belt-matched color
+  const circle = document.getElementById('score-circle');
+  const deg = (finalScore / 100) * 360;
+  circle.style.background = `conic-gradient(${beltColor} 0deg, ${beltColor} ${deg}deg, #ffffff ${deg}deg)`;
+
+  // Update belt tier badge
+  const tierEl = document.getElementById('belt-tier');
+  const descEl = document.getElementById('tier-desc');
+  tierEl.className = 'belt-tier ' + beltClass;
+  tierEl.textContent = beltName;
+  descEl.textContent = beltDesc;
+
+  // Breakdown
+  const list = document.getElementById('breakdown-list');
+  list.innerHTML = '';
+  Object.keys(sections).forEach(key => {
+    const cfg = sections[key];
+    const sScore = sectionScores[key];
+    const pct = Math.round(sScore.pct * 100);
+    const row = document.createElement('div');
+    row.className = 'breakdown-row';
+    row.innerHTML = `
+      <div class="breakdown-name">${cfg.name}</div>
+      <div class="breakdown-bar"><div class="breakdown-bar-fill" style="width:${pct}%"></div></div>
+      <div class="breakdown-score">${Math.round(sScore.weighted)} / ${cfg.weight}</div>
+    `;
+    list.appendChild(row);
+  });
+}
+
+// Initial render
+updateScore();
+</script>
+
+</body>
+</html>
