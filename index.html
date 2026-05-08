@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GB Wear — Proshop Pre-Assessment</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --red:#e2211c; --red-dark:#b51a16; --black:#111; --grey:#6b6b6b; --light:#f5f5f5; --border:#e2e2e2; --white:#fff; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; background:#fafafa; color:var(--black); line-height:1.5; padding-bottom:60px; }
+  .header { background:#afafaf; padding:28px 24px; text-align:center; border-bottom:6px solid var(--red); }
+  .header-logo { display:flex; justify-content:center; margin-bottom:14px; }
+  .header-logo svg { width:260px; height:auto; }
+  .header h1 { font-size:22px; font-weight:800; color:var(--black); margin-top:4px; }
+  .header p { font-size:13px; color:#555; margin-top:4px; }
+  .container { max-width:820px; margin:0 auto; padding:24px; }
+  .intro { background:var(--white); border-left:4px solid var(--red); padding:16px 20px; margin-bottom:20px; border-radius:4px; font-size:13px; color:var(--grey); box-shadow:0 1px 3px rgba(0,0,0,.04); }
+  .section { background:var(--white); border-radius:6px; padding:22px 24px; margin-bottom:16px; box-shadow:0 1px 3px rgba(0,0,0,.06); border:1px solid var(--border); }
+  .sec-hd { display:flex; align-items:center; gap:12px; margin-bottom:16px; padding-bottom:12px; border-bottom:2px solid var(--red); }
+  .sec-num { background:var(--red); color:#fff; width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0; }
+  .sec-title { flex:1; font-size:16px; font-weight:700; }
+  .sec-wt { background:var(--light); color:var(--grey); padding:3px 10px; border-radius:12px; font-size:11px; font-weight:600; }
+  .q { margin-bottom:16px; padding-bottom:12px; border-bottom:1px dashed var(--border); }
+  .q:last-child { border-bottom:none; padding-bottom:0; margin-bottom:0; }
+  .ql { display:block; font-size:13px; font-weight:600; margin-bottom:7px; }
+  .yn { display:flex; gap:8px; }
+  .yn label,.opts label { flex:1; text-align:center; padding:9px 12px; border:2px solid var(--border); border-radius:6px; cursor:pointer; font-size:12px; font-weight:600; color:var(--grey); transition:all .15s; background:var(--white); }
+  .yn label:hover,.opts label:hover { border-color:var(--red); color:var(--black); }
+  .yn label.sel,.opts label.sel { background:var(--red); color:#fff; border-color:var(--red); }
+  .opts { display:grid; grid-template-columns:repeat(2,1fr); gap:7px; }
+  .sw { padding:4px 2px 0; }
+  .sr { display:flex; align-items:center; gap:10px; }
+  .sr input[type=range] { flex:1; -webkit-appearance:none; height:5px; background:var(--border); border-radius:3px; outline:none; }
+  .sr input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--red); border-radius:50%; cursor:pointer; border:2px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,.2); }
+  .sr input[type=range]::-moz-range-thumb { width:18px; height:18px; background:var(--red); border-radius:50%; cursor:pointer; border:2px solid #fff; }
+  .sv { min-width:86px; text-align:center; background:#d9d9d9; color:var(--black); padding:5px 8px; border-radius:4px; font-size:12px; font-weight:700; }
+  .sm { display:flex; justify-content:space-between; font-size:10px; color:var(--grey); margin-top:3px; }
+  .dk { margin-top:6px; display:flex; align-items:center; gap:5px; font-size:11px; color:var(--grey); cursor:pointer; }
+  .result-wrapper { position:relative; margin-top:20px; }
+  .result-inner { background:#d9d9d9; border-radius:6px; padding:32px 20px; text-align:center; transition:filter .5s; }
+  .result-inner.blurred { filter:blur(10px); pointer-events:none; user-select:none; }
+  .result-inner h2 { font-size:17px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--red); margin-bottom:20px; }
+  .circle { width:200px; height:200px; margin:0 auto 20px; border-radius:50%; display:flex; align-items:center; justify-content:center; position:relative; transition:background .6s; }
+  .circle::after { content:""; position:absolute; inset:11px; background:#7f817e; border-radius:50%; }
+  .circle-inner { position:relative; z-index:1; text-align:center; }
+  .score-n { font-size:56px; font-weight:900; line-height:1; color:#fff; }
+  .score-l { font-size:11px; color:#ddd; letter-spacing:1px; text-transform:uppercase; }
+  .belt { display:inline-block; padding:8px 22px; border-radius:30px; font-size:15px; font-weight:800; letter-spacing:2px; text-transform:uppercase; margin-bottom:12px; background:#e8e8e8; color:var(--black); border:2px solid #e8e8e8; }
+  .belt.blue{background:#1e5fb4;color:#fff;border-color:#1e5fb4}
+  .belt.purple{background:#6a3aa1;color:#fff;border-color:#6a3aa1}
+  .belt.brown{background:#7a4a1e;color:#fff;border-color:#7a4a1e}
+  .belt.black{background:#111;color:#fff;border:2px solid var(--red)}
+  .tier-d { font-size:13px; color:#444; max-width:460px; margin:0 auto 20px; line-height:1.6; }
+  .cta-btn { display:inline-block; background:var(--red); color:#fff; padding:14px 32px; border-radius:6px; font-size:14px; font-weight:800; letter-spacing:1px; text-transform:uppercase; text-decoration:none; transition:all .2s; box-shadow:0 4px 14px rgba(226,33,28,.3); }
+  .cta-btn:hover { background:var(--red-dark); transform:translateY(-2px); }
+  .cta-sub { margin-top:10px; font-size:11px; color:#555; }
+  .bdown { margin-top:26px; padding-top:20px; border-top:1px solid #bbb; text-align:left; max-width:460px; margin-left:auto; margin-right:auto; }
+  .bdown h3 { font-size:11px; color:#555; text-transform:uppercase; letter-spacing:1px; margin-bottom:12px; text-align:center; }
+  .brow { display:flex; align-items:center; padding:7px 0; border-bottom:1px solid #bbb; font-size:12px; }
+  .brow:last-child { border-bottom:none; }
+  .bname { flex:0 0 auto; min-width:125px; }
+  .bbar { flex:1; height:5px; background:#bbb; border-radius:3px; margin:0 10px; overflow:hidden; }
+  .bbar-f { height:100%; background:var(--red); border-radius:3px; transition:width .4s; }
+  .bscore { flex:0 0 auto; font-weight:700; min-width:55px; text-align:right; }
+  .modal-overlay { position:absolute; inset:0; z-index:20; display:flex; align-items:center; justify-content:center; background:rgba(175,175,175,0.6); backdrop-filter:blur(3px); border-radius:6px; padding:20px; }
+  .modal-overlay.gone { display:none; }
+  .modal { background:#fff; border-radius:12px; padding:30px 26px; max-width:380px; width:100%; box-shadow:0 12px 48px rgba(0,0,0,.2); text-align:center; }
+  .modal .icon { font-size:40px; margin-bottom:10px; }
+  .modal h3 { font-size:19px; font-weight:800; color:var(--black); margin-bottom:6px; }
+  .modal .sub { font-size:13px; color:var(--grey); margin-bottom:22px; line-height:1.5; }
+  .field { margin-bottom:12px; text-align:left; }
+  .field label { display:block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--black); margin-bottom:4px; }
+  .field input { width:100%; padding:10px 12px; border:2px solid var(--border); border-radius:6px; font-size:13px; outline:none; background:#fafafa; transition:border-color .15s; }
+  .field input:focus { border-color:var(--red); background:#fff; }
+  .field input.err { border-color:var(--red); background:#fff5f5; }
+  .err-msg { font-size:11px; color:var(--red); margin-top:6px; display:none; }
+  .reveal-btn { width:100%; padding:13px; background:var(--red); color:#fff; border:none; border-radius:6px; font-size:14px; font-weight:800; letter-spacing:1px; text-transform:uppercase; cursor:pointer; margin-top:6px; box-shadow:0 4px 14px rgba(226,33,28,.3); transition:all .2s; }
+  .reveal-btn:hover { background:var(--red-dark); transform:translateY(-1px); }
+  .privacy { font-size:10px; color:#aaa; margin-top:10px; }
+  .footer-note { text-align:center; font-size:11px; color:var(--grey); padding:20px; }
+  @media(max-width:600px){ .opts{grid-template-columns:1fr} .circle{width:170px;height:170px} .score-n{font-size:46px} }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-logo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 936.88 206.2">
+      <defs><style>.s0{fill-rule:evenodd}.s0,.s1{fill:#fcfcfc}.s2{fill:#e2211c}.s3{fill:#afafaf}.s4{fill:#1a1a1a}</style></defs>
+      <rect class="s3" x="487.3" y="0" width="449.58" height="206.2" rx="46.1" ry="46.1"/>
+      <rect class="s4" y="0" width="601.89" height="206.2" rx="46.1" ry="46.1"/>
+      <path class="s2" d="M206.2,47.4v111.4c0,26.2-21.2,47.4-47.4,47.4H47.4C21.2,206.2,0,185,0,158.8V47.4C0,21.2,21.2,0,47.4,0h111.4C185,0,206.2,21.2,206.2,47.4Z"/>
+      <polygon class="s0" points="34.4 141 103.8 36.8 144.7 97.1 125.9 97.1 103.7 64.7 63.7 125.5 143.6 125.7 138.4 118.2 99.4 118.2 109.8 102.8 148.1 103 171.9 141.1 34.4 141"/>
+      <path class="s1" d="M272.82,121.47c0,3.04-.42,5.82-1.27,8.33-.85,2.51-2.16,4.69-3.92,6.52-3.61,3.82-8.66,5.73-15.17,5.73-3.11,0-5.91-.53-8.38-1.59-2.48-1.06-4.63-2.55-6.47-4.46l8.27-7.96c.64.92,1.54,1.7,2.71,2.33,1.17.64,2.46.95,3.87.95,2.48,0,4.51-.83,6.1-2.49,1.59-1.66,2.39-4.12,2.39-7.37v-55.8h11.88v55.8Z"/>
+      <path class="s1" d="M282.29,141.2v-75.53h11.88v75.53h-11.88Z"/>
+      <path class="s1" d="M342.17,122.63c0,2.9-.46,5.52-1.38,7.85-.92,2.33-2.19,4.35-3.82,6.05-3.61,3.68-8.27,5.52-14,5.52s-10.5-1.84-14.11-5.52c-1.63-1.7-2.9-3.71-3.82-6.05-.92-2.33-1.38-4.95-1.38-7.85v-56.97h11.88v57.6c0,2.69.72,4.71,2.17,6.05,1.45,1.34,3.2,2.02,5.25,2.02s3.78-.67,5.2-2.02c1.41-1.34,2.12-3.36,2.12-6.05v-57.6h11.88v56.97Z"/>
+      <path class="s1" d="M350.87,115.95v-10.71h21.43v10.71h-21.43Z"/>
+      <path class="s1" d="M404.66,121.47c0,3.04-.42,5.82-1.27,8.33-.85,2.51-2.16,4.69-3.92,6.52-3.61,3.82-8.66,5.73-15.17,5.73-3.11,0-5.91-.53-8.38-1.59-2.48-1.06-4.63-2.55-6.47-4.46l8.27-7.96c.64.92,1.54,1.7,2.71,2.33,1.17.64,2.46.95,3.87.95,2.48,0,4.51-.83,6.1-2.49,1.59-1.66,2.39-4.12,2.39-7.37v-55.8h11.88v55.8Z"/>
+      <path class="s1" d="M414.13,141.2v-75.53h11.88v75.53h-11.88Z"/>
+      <path class="s1" d="M457.16,76.38v64.82h-11.88v-64.82h-12.62v-10.71h37.24v10.71h-12.73Z"/>
+      <path class="s1" d="M513.55,120.3c0,3.89-.34,7.18-1.01,9.87-.67,2.69-1.96,4.95-3.87,6.79-1.56,1.49-3.55,2.69-5.99,3.61-2.44.92-5.36,1.38-8.75,1.38-6.44,0-11.32-1.66-14.64-4.99-1.84-1.84-3.11-4-3.82-6.47-.71-2.47-1.06-5.73-1.06-9.76h11.88c0,2.05.14,3.73.42,5.04.28,1.31.85,2.46,1.7,3.45.57.57,1.29,1.04,2.17,1.43.88.39,2,.58,3.34.58,2.62,0,4.53-.71,5.73-2.12.78-.92,1.31-2.03,1.59-3.34.28-1.31.42-2.99.42-5.04s-.09-3.64-.27-4.99c-.18-1.34-.53-2.46-1.06-3.34-.53-.88-1.26-1.64-2.17-2.28-.92-.64-2.12-1.24-3.61-1.8l-9.02-3.71c-1.91-.78-3.54-1.66-4.88-2.65-1.34-.99-2.42-2.21-3.24-3.66-.81-1.45-1.42-3.2-1.8-5.25-.39-2.05-.58-4.52-.58-7.43,0-3.39.51-6.45,1.54-9.18,1.02-2.72,2.56-5,4.61-6.84,1.63-1.41,3.52-2.53,5.68-3.34,2.16-.81,4.58-1.22,7.27-1.22,5.87,0,10.4,1.52,13.58,4.56,1.98,1.91,3.36,4.23,4.14,6.95.78,2.72,1.17,5.89,1.17,9.5h-11.88c0-1.7-.11-3.22-.32-4.56-.21-1.34-.71-2.51-1.49-3.5-1.13-1.48-2.9-2.23-5.3-2.23-1.2,0-2.21.2-3.02.58-.81.39-1.5.9-2.07,1.54-1.34,1.56-2.02,4.03-2.02,7.43,0,1.56.07,2.86.21,3.93s.44,1.96.9,2.71c.46.74,1.1,1.4,1.91,1.96.81.57,1.89,1.1,3.24,1.59l8.91,3.61c2.26.92,4.14,1.95,5.62,3.08,1.49,1.13,2.65,2.51,3.5,4.14s1.45,3.57,1.8,5.83c.35,2.26.53,4.99.53,8.17Z"/>
+      <path class="s1" d="M559.23,122.63c0,2.9-.46,5.52-1.38,7.85-.92,2.33-2.19,4.35-3.82,6.05-3.61,3.68-8.27,5.52-14,5.52s-10.5-1.84-14.11-5.52c-1.63-1.7-2.9-3.71-3.82-6.05-.92-2.33-1.38-4.95-1.38-7.85v-56.97h11.88v57.6c0,2.69.72,4.71,2.17,6.05,1.45,1.34,3.2,2.02,5.25,2.02s3.78-.67,5.2-2.02c1.41-1.34,2.12-3.36,2.12-6.05v-57.6h11.88v56.97Z"/>
+      <path class="s1" d="M638.4,141.2v-75.53h31.72v10.71h-19.84v21.43h17.08v10.71h-17.08v21.96h19.84v10.71h-31.72Z"/>
+      <path class="s1" d="M715.81,122.63c0,2.9-.46,5.52-1.38,7.85-.92,2.33-2.19,4.35-3.82,6.05-3.61,3.68-8.27,5.52-14,5.52s-10.5-1.84-14.11-5.52c-1.63-1.7-2.9-3.71-3.82-6.05-.92-2.33-1.38-4.95-1.38-7.85v-56.97h11.88v57.6c0,2.69.72,4.71,2.17,6.05,1.45,1.34,3.2,2.02,5.25,2.02s3.78-.67,5.2-2.02c1.41-1.34,2.12-3.36,2.12-6.05v-57.6h11.88v56.97Z"/>
+      <path class="s1" d="M753.79,141.2l-9.87-30.98h-6.68v30.98h-11.88v-75.53h19.1c6.93,0,11.88,1.75,14.85,5.25,2.97,3.5,4.46,9.18,4.46,17.03,0,4.67-.6,8.66-1.8,11.99-1.2,3.33-3.54,5.91-7,7.74l11.25,33.52h-12.41ZM751.88,87.94c0-1.55-.09-3.04-.27-4.46-.18-1.41-.51-2.65-1.01-3.71-.5-1.06-1.24-1.89-2.23-2.49-.99-.6-2.26-.9-3.82-.9h-7.32v23.13h7.32c1.55,0,2.83-.3,3.82-.9.99-.6,1.73-1.43,2.23-2.49.49-1.06.83-2.3,1.01-3.71.18-1.41.27-2.9.27-4.46Z"/>
+      <path class="s1" d="M811.44,103.43c0,4.46-.05,8.36-.16,11.72-.11,3.36-.34,6.31-.69,8.86-.36,2.55-.9,4.74-1.64,6.58-.74,1.84-1.75,3.5-3.02,4.99-1.56,1.84-3.5,3.38-5.83,4.61s-5.27,1.86-8.8,1.86-6.47-.62-8.8-1.86c-2.33-1.24-4.28-2.77-5.83-4.61-1.27-1.49-2.26-3.17-2.97-5.04-.71-1.87-1.26-4.07-1.64-6.58-.39-2.51-.64-5.45-.74-8.81-.11-3.36-.16-7.27-.16-11.72s.05-8.36.16-11.72c.11-3.36.35-6.29.74-8.81.39-2.51.94-4.7,1.64-6.58.71-1.87,1.7-3.55,2.97-5.04,1.55-1.84,3.5-3.38,5.83-4.61,2.33-1.24,5.27-1.86,8.8-1.86s6.47.62,8.8,1.86c2.33,1.24,4.28,2.78,5.83,4.61,1.27,1.48,2.28,3.15,3.02,4.99.74,1.84,1.29,4.03,1.64,6.58.35,2.55.58,5.5.69,8.86.11,3.36.16,7.27.16,11.72ZM799.55,103.43c0-6.93-.14-12.38-.42-16.34-.28-3.96-.99-6.86-2.12-8.7-.57-.85-1.31-1.54-2.23-2.07-.92-.53-2.09-.8-3.5-.8s-2.56.27-3.45.8c-.88.53-1.61,1.22-2.17,2.07-1.13,1.84-1.86,4.74-2.17,8.7-.32,3.96-.48,9.41-.48,16.34s.16,12.38.48,16.34c.32,3.96,1.04,6.86,2.17,8.7.57.85,1.29,1.54,2.17,2.07.88.53,2.03.79,3.45.79s2.58-.26,3.5-.79c.92-.53,1.66-1.22,2.23-2.07,1.13-1.84,1.84-4.74,2.12-8.7.28-3.96.42-9.41.42-16.34Z"/>
+      <path class="s1" d="M858.1,88.68c0,7.92-1.52,13.72-4.56,17.4-3.04,3.68-7.99,5.52-14.85,5.52h-7.11v29.6h-11.88v-75.53h18.99c6.86,0,11.81,1.86,14.85,5.57,3.04,3.71,4.56,9.53,4.56,17.45ZM846.22,88.68c0-3.82-.53-6.82-1.59-9.02-1.06-2.19-3.18-3.29-6.37-3.29h-6.68v24.51h6.68c3.18,0,5.3-1.08,6.37-3.24,1.06-2.16,1.59-5.15,1.59-8.96Z"/>
+      <path class="s1" d="M865.57,141.2v-75.53h31.72v10.71h-19.84v21.43h17.08v10.71h-17.08v21.96h19.84v10.71h-31.72Z"/>
+    </svg>
+  </div>
+  <h1>Do you know your Proshop Score?</h1>
+  <p>Take the test and see how to unlock its potential</p>
+</div>
+
+<div class="container">
+  <div class="intro">Answer the questions below to receive an instant scoring of your school's proshop strategy across 6 key dimensions. Your results reveal your current Belt Tier and the path to grow your proshop performance.</div>
+
+  <div class="section"><div class="sec-hd"><div class="sec-num">1</div><div class="sec-title">Sales Performance</div><div class="sec-wt">Weight 20%</div></div>
+    <div class="q"><span class="ql">Do you know your Proshop Revenue per active student?</span><div class="yn" data-q="s1q1"><label data-val="5">Yes</label><label data-val="1">No</label></div></div>
+    <div class="q"><span class="ql">What is your Proshop Revenue as % of total revenue?</span><div class="sw"><div class="sr"><input type="range" min="0" max="25" value="0" data-q="s1q2" class="slider"><div class="sv" id="s1q2-v">0%</div></div><div class="sm"><span>0%</span><span>25%</span></div><label class="dk"><input type="checkbox" data-dk="s1q2"> I don't know</label></div></div>
+    <div class="q"><span class="ql">Do you know your conversion rate (buyers / active students)?</span><div class="sw"><div class="sr"><input type="range" min="0" max="100" value="0" data-q="s1q3" class="slider"><div class="sv" id="s1q3-v">0%</div></div><div class="sm"><span>0%</span><span>100%</span></div><label class="dk"><input type="checkbox" data-dk="s1q3"> I don't know</label></div></div>
+  </div>
+
+  <div class="section"><div class="sec-hd"><div class="sec-num">2</div><div class="sec-title">Space &amp; Layout</div><div class="sec-wt">Weight 15%</div></div>
+    <div class="q"><span class="ql">Do you have a dedicated proshop?</span><div class="yn" data-q="s2q1"><label data-val="5">Yes</label><label data-val="1">No</label></div></div>
+    <div class="q"><span class="ql">Square meters dedicated to the proshop</span><div class="sw"><div class="sr"><input type="range" min="0" max="20" value="0" step="1" data-q="s2q2" class="slider"><div class="sv" id="s2q2-v">0 m²</div></div><div class="sm"><span>0 m²</span><span>20 m²</span></div></div></div>
+    <div class="q"><span class="ql">Location within the school</span><div class="opts" data-q="s2q3"><label data-val="5">Entry</label><label data-val="4">Lobby</label><label data-val="3">Mat-adjacent</label><label data-val="1">Tucked away</label></div></div>
+    <div class="q"><span class="ql">Have you used a designer to build your proshop?</span><div class="yn" data-q="s2q4"><label data-val="5">Yes</label><label data-val="1">No</label></div></div>
+  </div>
+
+  <div class="section"><div class="sec-hd"><div class="sec-num">3</div><div class="sec-title">Visual Merchandising</div><div class="sec-wt">Weight 20%</div></div>
+    <div class="q"><span class="ql">Do you use mannequins or styled displays?</span><div class="yn" data-q="s3q1"><label data-val="5">Yes</label><label data-val="1">No</label></div></div>
+    <div class="q"><span class="ql">How often do you rotate your displays?</span><div class="opts" data-q="s3q2"><label data-val="1">Never / Rarely</label><label data-val="2">Twice a year</label><label data-val="3">Quarterly</label><label data-val="4">Monthly</label><label data-val="5">Weekly</label></div></div>
+    <div class="q"><span class="ql">Is your proshop split into zones (kids, adults, casual, etc.)?</span><div class="yn" data-q="s3q3"><label data-val="5">Yes</label><label data-val="1">No</label></div></div>
+    <div class="q"><span class="ql">Do you use different types of supports (hangers, shelves, tables, etc.)?</span><div class="yn" data-q="s3q4"><label data-val="5">Yes</label><label data-val="1">No</label></div></div>
+  </div>
+
+  <div class="section"><div class="sec-hd"><div class="sec-num">4</div><div class="sec-title">Product Assortment</div><div class="sec-wt">Weight 15%</div></div>
+    <div class="q"><span class="ql">Do you have Kids products exposed?</span><div class="yn" data-q="s4q1"><label data-val="5">Yes</label><label data-val="1">No</label></div></div>
+    <div class="q"><span class="ql">Do you have accessories on display?</span><div class="yn" data-q="s4q2"><label data-val="5">Yes</label><label data-val="1">No</label></div></div>
+    <div class="q"><span class="ql">Do you have women's casual wear?</span><div class="yn" data-q="s4q3"><label data-val="5">Yes</label><label data-val="1">No</label></div></div>
+    <div class="q"><span class="ql">Do you have men's casual wear?</span><div class="yn" data-q="s4q4"><label data-val="5">Yes</label><label data-val="1">No</label></div></div>
+    <div class="q"><span class="ql">Do you have core products (gi, rashguards, shorts, belts)?</span><div class="yn" data-q="s4q5"><label data-val="5">Yes</label><label data-val="1">No</label></div></div>
+  </div>
+
+  <div class="section"><div class="sec-hd"><div class="sec-num">5</div><div class="sec-title">Sales Process &amp; Staff</div><div class="sec-wt">Weight 15%</div></div>
+    <div class="q"><span class="ql">Is your staff trained on the products?</span><div class="yn" data-q="s5q1"><label data-val="5">Yes</label><label data-val="1">No</label></div></div>
+    <div class="q"><span class="ql">Active vs. Passive — Does your team often recommend gear to students?</span><div class="sw"><div class="sr"><input type="range" min="1" max="5" value="3" step="1" data-q="s5q2" class="slider"><div class="sv" id="s5q2-v">Mixed</div></div><div class="sm"><span>Passive</span><span>Active</span></div></div></div>
+    <div class="q"><span class="ql">Does the Head Coach share the "Why" of using Gracie Barra products?</span><div class="yn" data-q="s5q3"><label data-val="5">Yes</label><label data-val="1">No</label></div></div>
+    <div class="q"><span class="ql">Does your staff wear Gracie Barra products every day?</span><div class="yn" data-q="s5q4"><label data-val="5">Yes</label><label data-val="1">No</label></div></div>
+    <div class="q"><span class="ql">Does your staff always wear the new collections?</span><div class="yn" data-q="s5q5"><label data-val="5">Yes</label><label data-val="1">No</label></div></div>
+  </div>
+
+  <div class="section"><div class="sec-hd"><div class="sec-num">6</div><div class="sec-title">Digital &amp; Operations</div><div class="sec-wt">Weight 15%</div></div>
+    <div class="q"><span class="ql">Do you have a POS system in place?</span><div class="yn" data-q="s6q1"><label data-val="5">Yes</label><label data-val="1">No</label></div></div>
+    <div class="q"><span class="ql">Do you promote pre-orders for new collections?</span><div class="yn" data-q="s6q2"><label data-val="5">Yes</label><label data-val="1">No</label></div></div>
+    <div class="q"><span class="ql">Do you post/repost new GB Products on social media?</span><div class="yn" data-q="s6q3"><label data-val="5">Yes</label><label data-val="1">No</label></div></div>
+    <div class="q"><span class="ql">Do you have a reorder cadence and dead-stock management process?</span><div class="yn" data-q="s6q4"><label data-val="5">Yes</label><label data-val="1">No</label></div></div>
+  </div>
+
+  <div class="result-wrapper">
+    <div class="result-inner blurred" id="result-content">
+      <h2>Your Proshop Score</h2>
+      <div class="circle" id="score-circle"><div class="circle-inner"><div class="score-n" id="score-num">0</div><div class="score-l">/ 100</div></div></div>
+      <div class="belt" id="belt-tier">White Belt</div>
+      <div class="tier-d" id="tier-desc">Complete the assessment to discover your tier.</div>
+      <a href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ1Eta3Ok3CbKfAXhxm1mWRlSk7T4tNAFGQa4C8CgSgA_YXxxrN-U0WMPGNEYOWsgbwxavMdbFHq" target="_blank" class="cta-btn">Improve your Score</a>
+      <div class="cta-sub">Book a meeting with our School Success Specialist</div>
+      <div class="bdown"><h3>Breakdown by Section</h3><div id="breakdown-list"></div></div>
+    </div>
+    <div class="modal-overlay" id="modal-overlay">
+      <div class="modal">
+        <div class="icon">🥋</div>
+        <h3>Unlock Your Score</h3>
+        <p class="sub">Your results are ready. Fill in your details to reveal your Proshop Belt Tier and full breakdown.</p>
+        <div class="field"><label>Your Name *</label><input type="text" id="f-name" placeholder="John Silva"></div>
+        <div class="field"><label>Your School *</label><input type="text" id="f-school" placeholder="GB Lisbon"></div>
+        <div class="field"><label>Your Email *</label><input type="email" id="f-email" placeholder="john@graciebarraschool.com"></div>
+        <div class="err-msg" id="err-msg">Please fill in all fields with a valid email.</div>
+        <button class="reveal-btn" onclick="revealScore()">Reveal My Score →</button>
+        <div class="privacy">🔒 Your information is kept confidential</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer-note">Powered By Gracie Barra Europe</div>
+
+<script>
+const answers={};
+const sections={sales:{name:'Sales Performance',weight:20,qs:['s1q1','s1q2','s1q3']},space:{name:'Space & Layout',weight:15,qs:['s2q1','s2q2','s2q3','s2q4']},visual:{name:'Visual Merchandising',weight:20,qs:['s3q1','s3q2','s3q3','s3q4']},product:{name:'Product Assortment',weight:15,qs:['s4q1','s4q2','s4q3','s4q4','s4q5']},staff:{name:'Sales Process & Staff',weight:15,qs:['s5q1','s5q2','s5q3','s5q4','s5q5']},digital:{name:'Digital & Operations',weight:15,qs:['s6q1','s6q2','s6q3','s6q4']}};
+document.querySelectorAll('.yn,.opts').forEach(g=>{const q=g.dataset.q;g.querySelectorAll('label').forEach(l=>{l.addEventListener('click',()=>{g.querySelectorAll('label').forEach(x=>x.classList.remove('sel'));l.classList.add('sel');answers[q]=parseInt(l.dataset.val);updateScore();});});});
+function s2s(q,v){if(q==='s1q2')return v<5?1:v<8?2:v<12?3:v<18?4:5;if(q==='s1q3')return v<10?1:v<25?2:v<50?3:v<75?4:5;if(q==='s2q2')return v<2?1:v<6?2:v<10?3:v<15?4:5;if(q==='s5q2')return parseInt(v);return 1;}
+function s2d(q,v){if(q==='s1q2'||q==='s1q3')return v+'%';if(q==='s2q2')return v+' m²';if(q==='s5q2')return['Fully Passive','Mostly Passive','Mixed','Mostly Active','Fully Active'][parseInt(v)-1];return v;}
+document.querySelectorAll('.slider').forEach(sl=>{const q=sl.dataset.q;const ve=document.getElementById(q+'-v');sl.addEventListener('input',()=>{const dk=sl.closest('.sw')&&sl.closest('.sw').querySelector('[data-dk]');if(dk)dk.checked=false;ve.textContent=s2d(q,sl.value);answers[q]=s2s(q,parseInt(sl.value));updateScore();});});
+document.querySelectorAll('[data-dk]').forEach(cb=>{cb.addEventListener('change',()=>{const q=cb.dataset.dk;if(cb.checked){answers[q]=1;document.getElementById(q+'-v').textContent="Don't know";}else{const sl=document.querySelector('.slider[data-q="'+q+'"]');if(sl){answers[q]=s2s(q,parseInt(sl.value));document.getElementById(q+'-v').textContent=s2d(q,sl.value);}}updateScore();});});
+function updateScore(){let total=0;const ss={};Object.keys(sections).forEach(k=>{const c=sections[k];let raw=0;c.qs.forEach(q=>raw+=answers[q]||0);const pct=raw/(c.qs.length*5);const w=pct*c.weight;ss[k]={pct,w};total+=w;});const score=Math.round(total);document.getElementById('score-num').textContent=score;let bc='',bn='White Belt',bd='Foundational gaps. A full layout and merchandising redesign can transform your performance.',bcolor='#e8e8e8';if(score>90){bc='black';bn='Black Belt';bcolor='#111';bd="Flagship performance. You are a reference school for the GB Europe network.";}else if(score>80){bc='brown';bn='Brown Belt';bcolor='#7a4a1e';bd='Very strong. Fine-tuning across staff training and assortment depth can reach flagship level.';}else if(score>70){bc='purple';bn='Purple Belt';bcolor='#6a3aa1';bd='Strong foundation. Process discipline and digital integration will take you to the next level.';}else if(score>50){bc='blue';bn='Blue Belt';bcolor='#1e5fb4';bd='Functional but underperforming. Focused work on merchandising will unlock real revenue gains.';}const deg=(score/100)*360;document.getElementById('score-circle').style.background=`conic-gradient(${bcolor} 0deg,${bcolor} ${deg}deg,#bbbbbb ${deg}deg)`;const bt=document.getElementById('belt-tier');bt.className='belt'+(bc?' '+bc:'');bt.textContent=bn;document.getElementById('tier-desc').textContent=bd;const list=document.getElementById('breakdown-list');list.innerHTML='';Object.keys(sections).forEach(k=>{const c=sections[k];const s=ss[k];const pct=Math.round(s.pct*100);const row=document.createElement('div');row.className='brow';row.innerHTML=`<div class="bname">${c.name}</div><div class="bbar"><div class="bbar-f" style="width:${pct}%"></div></div><div class="bscore">${Math.round(s.w)}/${c.weight}</div>`;list.appendChild(row);});}
+function revealScore(){const name=document.getElementById('f-name').value.trim();const school=document.getElementById('f-school').value.trim();const email=document.getElementById('f-email').value.trim();const emailOk=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);[['f-name',name],['f-school',school],['f-email',email&&emailOk]].forEach(([id,ok])=>{document.getElementById(id).classList.toggle('err',!ok);});if(!name||!school||!email||!emailOk){document.getElementById('err-msg').style.display='block';return;}document.getElementById('err-msg').style.display='none';document.getElementById('result-content').classList.remove('blurred');document.getElementById('modal-overlay').classList.add('gone');setTimeout(()=>{document.getElementById('result-content').scrollIntoView({behavior:'smooth',block:'start'});},100);}
+updateScore();
+</script>
+</body>
+</html>
